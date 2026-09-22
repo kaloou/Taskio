@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class Projet(models.Model):
     
@@ -11,21 +12,24 @@ class Projet(models.Model):
         related_name='projets'
     )
 
-  def __str__(self):
-    return self.name
+    def __str__(self):
+        return self.nom
 
-  class Meta:
-    ordering = ('-date_creation', )
+    class Meta:
+        ordering = ('-date_creation', )
 
 
 class Etiquette(models.Model):
+
     nom = models.CharField(max_length=50, unique=True)
-    couleur = models.CharField(max_length=7, default='#6c757d')  # code hex
+    couleur = models.CharField(max_length=7, default='#6c757d')
 
     def __str__(self):
         return self.nom
 
+
 class Tache(models.Model):
+
     STATUT_CHOICES = [
         ('a_faire', 'À faire'),
         ('en_cours', 'En cours'),
@@ -47,7 +51,7 @@ class Tache(models.Model):
     projet = models.ForeignKey(
         Projet,
         on_delete=models.CASCADE,
-        related_name='taches'
+        related_name='taches' # si un projet est supprimé on supprimme toute ses taches associés
     )
     assignee = models.ForeignKey(
         User,
@@ -56,6 +60,7 @@ class Tache(models.Model):
         blank=True,
         related_name='taches_assignees'
     )
+
     etiquettes = models.ManyToManyField(Etiquette, blank=True)
 
     def __str__(self):
