@@ -48,11 +48,13 @@ class Tache(models.Model):
     date_echeance = models.DateField(null=True, blank=True)
     date_creation = models.DateTimeField(auto_now_add=True)
 
+    # si un projet est supprimé on supprimme toute ses taches associés
     projet = models.ForeignKey(
         Projet,
         on_delete=models.CASCADE,
-        related_name='taches' # si un projet est supprimé on supprimme toute ses taches associés
+        related_name='taches'
     )
+
     assignee = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
